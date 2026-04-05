@@ -1,488 +1,542 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ระบบน้ำประปาหมู่บ้านบุละลาย</title>
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet"/>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{min-height:100vh;background:linear-gradient(135deg,#0f2027 0%,#203a43 50%,#2c5364 100%);font-family:'Sarabun',sans-serif;color:#e8f4fd}
-    .header{background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border-bottom:1px solid rgba(100,200,255,0.15);padding:0 20px}
-    .header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:14px 0;flex-wrap:wrap}
-    .logo{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#43e3ff,#0080cc);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-    .title{font-size:18px;font-weight:700;color:#43e3ff}
-    .subtitle{font-size:11px;color:#8ec8e8;margin-top:2px}
-    .tabs{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
-    .tab-btn{padding:8px 14px;border-radius:8px;border:none;cursor:pointer;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;background:rgba(255,255,255,0.08);color:#8ec8e8;transition:all 0.2s}
-    .tab-btn.active{background:linear-gradient(135deg,#43e3ff,#0080cc);color:#001a26}
-    .content{max-width:1200px;margin:0 auto;padding:24px 20px}
-    .toolbar{display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap;align-items:center}
-    input,select{background:rgba(255,255,255,0.07);border:1px solid rgba(67,227,255,0.18);border-radius:8px;padding:9px 12px;color:#e8f4fd;font-family:'Sarabun',sans-serif;font-size:14px;outline:none;width:100%;box-sizing:border-box}
-    input::placeholder{color:#5a8fa8}
-    .btn-primary{padding:9px 20px;border-radius:8px;border:none;cursor:pointer;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:700;background:linear-gradient(135deg,#43e3ff,#0080cc);color:#001a26;white-space:nowrap}
-    .btn-secondary{padding:9px 20px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);cursor:pointer;font-family:'Sarabun',sans-serif;font-size:14px;background:transparent;color:#8ec8e8}
-    .btn-mini{padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:rgba(67,227,255,0.1);color:#43e3ff;font-size:13px;font-family:'Sarabun',sans-serif}
-    .btn-danger{background:rgba(255,80,80,0.12);color:#ff8888}
-    .form-card{background:rgba(255,255,255,0.05);border-radius:16px;padding:22px;margin-bottom:20px;border:1px solid rgba(67,227,255,0.18)}
-    .form-title{font-size:15px;font-weight:700;color:#43e3ff;margin-bottom:14px}
-    .form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
-    .form-grid .span2{grid-column:span 2}
-    .label{font-size:12px;color:#7aa8be;margin-bottom:5px}
-    .form-actions{display:flex;gap:10px;margin-top:14px}
-    table{width:100%;border-collapse:collapse}
-    thead tr{background:rgba(67,227,255,0.08)}
-    th{padding:11px 13px;text-align:left;font-size:13px;color:#43e3ff;font-weight:700;white-space:nowrap}
-    td{padding:10px 13px;font-size:14px;color:#c8e8f8;border-bottom:1px solid rgba(255,255,255,0.05)}
-    tr:hover td{background:rgba(67,227,255,0.04)}
-    .td-right{text-align:right}
-    .td-name{font-weight:600;color:#cef4ff}
-    .td-cyan{color:#43e3ff;font-weight:700}
-    .td-green{color:#7fffb4;font-weight:700}
-    .td-gold{color:#ffd700;font-weight:700;font-size:16px}
-    .empty{text-align:center;padding:40px;color:#5a8fa8}
-    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-bottom:26px}
-    .kpi-card{background:rgba(255,255,255,0.04);border-radius:14px;padding:18px 20px 14px}
-    .kpi-icon{font-size:26px;margin-bottom:6px}
-    .kpi-value{font-size:24px;font-weight:700}
-    .kpi-unit{font-size:12px;font-weight:400;opacity:0.8}
-    .kpi-label{font-size:12px;color:#7aa8be;margin-top:3px}
-    .calc-box{margin-top:12px;padding:12px 16px;background:rgba(67,227,255,0.08);border-radius:10px;color:#43e3ff;font-weight:600;border:1px solid rgba(67,227,255,0.15)}
-    .calc-num{font-size:20px}
-    .toast{position:fixed;top:20px;right:20px;z-index:9999;padding:12px 22px;border-radius:10px;font-weight:600;font-size:14px;color:#fff;box-shadow:0 4px 20px rgba(0,0,0,0.4);display:none}
-    .toast.show{display:block}
-    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:999;display:none;align-items:center;justify-content:center}
-    .modal-bg.show{display:flex}
-    .modal{background:#142533;border:1px solid rgba(255,80,80,0.3);border-radius:16px;padding:32px;max-width:360px;text-align:center}
-    .modal-icon{font-size:38px;margin-bottom:10px}
-    .modal-title{font-size:16px;font-weight:700;color:#ff8888;margin-bottom:8px}
-    .modal-desc{color:#8ec8e8;font-size:13px;margin-bottom:20px}
-    .modal-actions{display:flex;gap:10px;justify-content:center}
-    .overflow{overflow-x:auto}
-    .tr-total td{background:rgba(67,227,255,0.07);font-weight:700}
-    .saving{font-size:12px;color:#ffd700;margin-left:8px}
-    .section-title{font-size:17px;font-weight:700;color:#43e3ff;margin-bottom:6px}
-    .filter-row{display:flex;gap:14px;margin-bottom:22px;align-items:flex-end;flex-wrap:wrap}
-    .filter-row .fw{width:100px}
-    .filter-row .fm{width:120px}
-    .count{margin-left:auto;font-size:13px;color:#7aa8be}
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>น้ำประปาบุละลาย</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#060d14;--surface:#0d1a24;--surface2:#112030;--surface3:#162840;--border:rgba(56,189,248,0.1);--border2:rgba(56,189,248,0.22);--accent:#38bdf8;--accent2:#0ea5e9;--accent3:#7dd3fc;--gold:#f59e0b;--green:#10b981;--red:#ef4444;--text:#e2eef9;--text2:#94b8cc;--text3:#4d7a96;--r:14px;--r2:10px;--shadow:0 8px 32px rgba(0,0,0,0.4);--glow:0 0 24px rgba(56,189,248,0.12)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);font-family:'Sarabun',sans-serif;color:var(--text);font-size:15px;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(56,189,248,0.07),transparent);pointer-events:none;z-index:0}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.au{animation:fadeUp .35s ease both}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:rgba(56,189,248,0.15);border-radius:2px}
+
+/* LOGIN */
+#login-page{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
+#login-page::after{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2338bdf8' fill-opacity='.025'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");pointer-events:none}
+.login-card{position:relative;z-index:1;background:var(--surface);border:1px solid var(--border2);border-radius:24px;padding:40px 32px;width:100%;max-width:400px;box-shadow:var(--shadow),var(--glow);animation:fadeUp .5s ease}
+.login-drop{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 20px;box-shadow:0 0 32px rgba(56,189,248,.3)}
+.login-h1{font-family:'Kanit',sans-serif;font-size:22px;font-weight:600;color:var(--accent);text-align:center;margin-bottom:4px}
+.login-sub{font-size:12px;color:var(--text3);text-align:center;margin-bottom:30px;line-height:1.7}
+.login-err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:10px;padding:10px 14px;font-size:13px;color:#fca5a5;margin-bottom:16px;display:none;animation:dropIn .2s ease}
+.fld{margin-bottom:16px}
+.fld-lbl{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}
+.fld input{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r2);padding:13px 16px;color:var(--text);font-family:'Sarabun',sans-serif;font-size:15px;outline:none;width:100%;transition:border-color .2s}
+.fld input:focus{border-color:var(--accent)}
+.fld input::placeholder{color:var(--text3)}
+.login-btn{width:100%;padding:14px;border-radius:var(--r2);border:none;cursor:pointer;font-family:'Kanit',sans-serif;font-size:16px;font-weight:500;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#001a2c;transition:opacity .2s,transform .1s}
+.login-btn:active{transform:scale(.98)}
+.login-btn:disabled{opacity:.6;cursor:not-allowed}
+
+/* HEADER */
+.header{position:sticky;top:0;z-index:100;background:rgba(6,13,20,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:none}
+.header-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:12px 20px}
+.h-logo{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;box-shadow:0 0 16px rgba(56,189,248,.2)}
+.h-title{font-family:'Kanit',sans-serif;font-size:15px;font-weight:600;color:var(--accent)}
+.h-sub{font-size:10px;color:var(--text3);margin-top:1px}
+.h-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.role-pill{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.04em}
+.rp-admin{background:rgba(245,158,11,.12);color:var(--gold);border:1px solid rgba(245,158,11,.25)}
+.rp-collector{background:rgba(16,185,129,.1);color:#34d399;border:1px solid rgba(16,185,129,.2)}
+.rp-user{background:rgba(56,189,248,.08);color:var(--accent3);border:1px solid var(--border2)}
+.h-username{font-size:13px;color:var(--text2);font-weight:500}
+.dtabs{display:flex;gap:4px;background:var(--surface2);border-radius:10px;padding:4px}
+.dt-btn{padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;background:transparent;color:var(--text3);transition:all .2s;white-space:nowrap}
+.dt-btn.active{background:var(--surface3);color:var(--accent);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.h-logout{padding:7px 14px;border-radius:8px;border:1px solid var(--border);cursor:pointer;font-family:'Sarabun',sans-serif;font-size:13px;background:transparent;color:var(--text3);transition:all .2s}
+.h-logout:hover{border-color:var(--border2);color:var(--text)}
+.saving-pill{font-size:11px;color:var(--gold);display:none;gap:6px;align-items:center}
+.saving-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 1s infinite}
+
+/* CONTENT */
+.content{max-width:1280px;margin:0 auto;padding:24px 20px;display:none}
+.tab-section{display:none}.tab-section.active{display:block;animation:fadeUp .3s ease}
+
+/* PAGE HEADER */
+.phdr{display:flex;align-items:center;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.phdr-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.phi-blue{background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.2)}
+.phi-gold{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2)}
+.phdr h2{font-family:'Kanit',sans-serif;font-size:18px;font-weight:600;color:var(--text)}
+.phdr p{font-size:12px;color:var(--text3);margin-top:2px}
+.phdr-actions{margin-left:auto;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+
+/* FORM */
+input,select{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r2);padding:11px 14px;color:var(--text);font-family:'Sarabun',sans-serif;font-size:14px;outline:none;width:100%;transition:border-color .2s;-webkit-appearance:none}
+input:focus,select:focus{border-color:var(--accent)}
+input::placeholder{color:var(--text3)}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%2338bdf8' d='M5 6L0 0h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+select option{background:#0d1a24}
+.btn{padding:10px 20px;border-radius:var(--r2);border:none;cursor:pointer;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;transition:all .15s;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#001a2c}
+.btn-primary:hover{box-shadow:0 4px 16px rgba(56,189,248,.25)}
+.btn-ghost{background:var(--surface2);border:1.5px solid var(--border);color:var(--text2)}
+.btn-ghost:hover{border-color:var(--border2);color:var(--text)}
+.btn-danger{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#fca5a5}
+.btn-sm{padding:7px 12px;font-size:13px}
+.btn-icon{padding:8px;border-radius:8px}
+.search-wrap{position:relative;flex:1;max-width:340px}
+.search-wrap input{padding-left:40px}
+.search-ico{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none}
+.notice{background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.18);border-radius:10px;padding:11px 16px;font-size:13px;color:#fcd34d;display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.form-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:24px;margin-bottom:20px;box-shadow:var(--shadow);animation:dropIn .25s ease}
+.form-card h3{font-family:'Kanit',sans-serif;font-size:15px;font-weight:600;color:var(--accent);margin-bottom:20px}
+.fg{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:14px}
+.fg .full{grid-column:1/-1}
+.flbl{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px}
+.form-actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.calc-box{background:linear-gradient(135deg,rgba(56,189,248,.07),rgba(14,165,233,.04));border:1px solid rgba(56,189,248,.18);border-radius:10px;padding:16px 18px;margin-top:14px;display:none;animation:dropIn .2s ease}
+.cb-lbl{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.cb-val{font-family:'Kanit',sans-serif;font-size:28px;font-weight:700;color:var(--accent)}
+.cb-baht{font-size:14px;color:var(--gold);font-weight:600;margin-top:4px}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px}
+.sc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;position:relative;overflow:hidden;transition:border-color .2s}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.sc-blue::before{background:linear-gradient(90deg,var(--accent),transparent)}
+.sc-green::before{background:linear-gradient(90deg,var(--green),transparent)}
+.sc-gold::before{background:linear-gradient(90deg,var(--gold),transparent)}
+.sc-purple::before{background:linear-gradient(90deg,#a78bfa,transparent)}
+.sc:hover{border-color:var(--border2)}
+.sc-ico{font-size:22px;margin-bottom:8px}
+.sc-val{font-family:'Kanit',sans-serif;font-size:26px;font-weight:700;line-height:1}
+.sc-unit{font-size:12px;font-weight:400;color:var(--text2);margin-left:4px}
+.sc-lbl{font-size:12px;color:var(--text3);margin-top:6px}
+
+/* TABLE */
+.tw{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+.ts{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:560px}
+thead{background:var(--surface2)}
+th{padding:12px 16px;text-align:left;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;border-bottom:1px solid var(--border)}
+td{padding:13px 16px;font-size:14px;color:var(--text2);border-bottom:1px solid rgba(255,255,255,.03)}
+tr:last-child td{border-bottom:none}
+tbody tr{transition:background .15s}
+tbody tr:hover td{background:rgba(56,189,248,.04)}
+.tn{font-weight:600;color:var(--text)}
+.tr{text-align:right;font-variant-numeric:tabular-nums}
+.ta{color:var(--accent);font-weight:700}
+.tg{color:#34d399;font-weight:700}
+.tgo{color:var(--gold);font-weight:700}
+.tf{background:rgba(56,189,248,.04)}
+.tf td{font-weight:700;border-top:1px solid var(--border)}
+.tact{display:flex;gap:6px}
+.empty-row{padding:50px 20px;text-align:center;color:var(--text3)}
+.empty-row .ei{font-size:36px;margin-bottom:10px;opacity:.4}
+
+/* MOBILE CARDS */
+.mc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;transition:border-color .2s}
+.mc:hover{border-color:var(--border2)}
+.mc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.mc-name{font-family:'Kanit',sans-serif;font-size:16px;font-weight:600;color:var(--text)}
+.mc-addr{font-size:12px;color:var(--text3);margin-top:2px}
+.mc-meter{font-family:'Kanit',sans-serif;font-size:20px;font-weight:700;color:var(--accent);text-align:right}
+.mc-meter-lbl{font-size:10px;color:var(--text3);text-align:right}
+.mc-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.mc-tag{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:12px;color:var(--text2)}
+.mc-foot{display:flex;gap:8px;justify-content:flex-end}
+.rc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;transition:border-color .2s}
+.rc:hover{border-color:var(--border2)}
+.rc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.rc-name{font-weight:600;color:var(--text);font-size:15px}
+.rc-addr{font-size:12px;color:var(--text3);margin-top:2px}
+.rc-date{text-align:right}
+.rc-mo{font-family:'Kanit',sans-serif;font-size:14px;font-weight:600;color:var(--accent3)}
+.rc-yr{font-size:11px;color:var(--text3)}
+.rc-rows{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:12px}
+.rc-row{display:flex;justify-content:space-between;padding:9px 13px;font-size:13px;border-bottom:1px solid var(--border)}
+.rc-row:last-child{border-bottom:none}
+.rc-rl{color:var(--text3)}
+.rc-rv{color:var(--text);font-weight:600}
+.rc-amt{display:flex;justify-content:space-between;align-items:center}
+.rc-amt-lbl{font-size:12px;color:var(--text3)}
+.rc-amt-val{font-family:'Kanit',sans-serif;font-size:22px;font-weight:700;color:#34d399}
+
+/* CHIPS */
+.chip{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.04em}
+.chip-ok{background:rgba(16,185,129,.1);color:#34d399;border:1px solid rgba(16,185,129,.2)}
+.chip-no{background:rgba(239,68,68,.1);color:#fca5a5;border:1px solid rgba(239,68,68,.2)}
+.chip-admin{background:rgba(245,158,11,.1);color:var(--gold);border:1px solid rgba(245,158,11,.2)}
+.chip-coll{background:rgba(16,185,129,.1);color:#34d399;border:1px solid rgba(16,185,129,.2)}
+.chip-user{background:rgba(56,189,248,.08);color:var(--accent3);border:1px solid var(--border2)}
+
+/* TOAST */
+#toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:9999;padding:12px 24px;border-radius:24px;font-size:14px;font-weight:600;color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.4);display:none;white-space:nowrap;max-width:90vw;text-align:center;animation:dropIn .2s ease}
+#toast.show{display:block}
+
+/* MODAL */
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;display:none;align-items:flex-end;justify-content:center}
+.mbg.show{display:flex;animation:fadeIn .2s ease}
+.mbox{background:var(--surface);border:1px solid rgba(239,68,68,.22);border-radius:24px 24px 0 0;padding:28px 24px 36px;width:100%;max-width:440px;animation:dropIn .25s ease;text-align:center}
+.mico{font-size:40px;margin-bottom:10px}
+.mh{font-family:'Kanit',sans-serif;font-size:17px;font-weight:600;color:#fca5a5;margin-bottom:6px}
+.mp{font-size:13px;color:var(--text3);margin-bottom:24px;line-height:1.6}
+.mact{display:flex;gap:10px}
+.mact .btn{flex:1;justify-content:center}
+
+/* BOTTOM NAV */
+.bnav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(6,13,20,.95);backdrop-filter:blur(20px);border-top:1px solid var(--border);z-index:200;padding-bottom:env(safe-area-inset-bottom)}
+.bn-inner{display:flex}
+.bn-btn{flex:1;padding:10px 4px 8px;border:none;background:transparent;color:var(--text3);font-family:'Sarabun',sans-serif;font-size:10px;font-weight:600;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .2s}
+.bn-btn .bi{font-size:22px;line-height:1;transition:transform .2s}
+.bn-btn.active{color:var(--accent)}
+.bn-btn.active .bi{transform:translateY(-2px)}
+
+/* CARDS LIST */
+.card-list{display:flex;flex-direction:column;gap:10px}
+
+@media(min-width:640px){.stats-grid{grid-template-columns:repeat(4,1fr)}.mbg{align-items:center;padding:20px}.mbox{border-radius:24px;max-width:400px}}
+@media(min-width:768px){.bnav{display:none!important}.dtabs{display:flex}.content{padding-bottom:24px}.d-tbl{display:block}.d-cards{display:none!important}}
+@media(max-width:767px){.bnav{display:block}.dtabs{display:none}.content{padding-bottom:84px}.d-tbl{display:none}.d-cards{display:flex;flex-direction:column;gap:10px}}
+</style>
 </head>
 <body>
-
-<!-- Toast -->
-<div id="toast" class="toast"></div>
-
-<!-- Confirm Delete Modal -->
-<div id="modal" class="modal-bg">
-  <div class="modal">
-    <div class="modal-icon">⚠️</div>
-    <div class="modal-title">ยืนยันการลบสมาชิก?</div>
-    <div class="modal-desc">ข้อมูลมิเตอร์ทั้งหมดของสมาชิกนี้จะถูกลบออกด้วย</div>
-    <div class="modal-actions">
-      <button onclick="doDelete()" style="padding:9px 24px;border-radius:8px;border:none;cursor:pointer;background:#c0392b;color:#fff;font-family:'Sarabun',sans-serif;font-weight:700">ลบ</button>
-      <button class="btn-secondary" onclick="closeModal()">ยกเลิก</button>
+<div id="toast"></div>
+<div id="modal" class="mbg">
+  <div class="mbox">
+    <div class="mico">⚠️</div>
+    <div class="mh" id="mh">ยืนยันการลบ?</div>
+    <div class="mp" id="mp">ข้อมูลจะถูกลบออกถาวร</div>
+    <div class="mact">
+      <button class="btn btn-danger" id="mok">ลบออก</button>
+      <button class="btn btn-ghost" onclick="closeMod()">ยกเลิก</button>
     </div>
   </div>
 </div>
 
-<!-- Header -->
-<div class="header">
+<!-- LOGIN -->
+<div id="login-page">
+  <div class="login-card">
+    <div class="login-drop">💧</div>
+    <div class="login-h1">ระบบน้ำประปาบุละลาย</div>
+    <div class="login-sub">บ้านบุละลาย ตำบลแตล อำเภอศีขรภูมิ<br>จังหวัดสุรินทร์</div>
+    <div id="lerr" class="login-err"></div>
+    <div class="fld"><div class="fld-lbl">ชื่อผู้ใช้</div><input id="lu" placeholder="username" autocomplete="username"/></div>
+    <div class="fld"><div class="fld-lbl">รหัสผ่าน</div><input id="lp" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <button class="login-btn" id="lbtn" onclick="doLogin()">เข้าสู่ระบบ</button>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="header" id="app-hdr">
   <div class="header-inner">
-    <div class="logo">💧</div>
-    <div>
-      <div class="title">ระบบน้ำประปาหมู่บ้านบุละลาย</div>
-      <div class="subtitle">บ้านบุละลาย ตำบลแตล อำเภอศีขรภูมิ จังหวัดสุรินทร์</div>
-    </div>
-    <span id="saving-badge" class="saving" style="display:none">⏳ กำลังบันทึก...</span>
-    <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('members')">👥 สมาชิก</button>
-      <button class="tab-btn" onclick="switchTab('usage')">🚿 บันทึกมิเตอร์</button>
-      <button class="tab-btn" onclick="switchTab('summary')">📊 สรุปรายเดือน</button>
+    <div class="h-logo">💧</div>
+    <div><div class="h-title">น้ำประปาบุละลาย</div><div class="h-sub">ตำบลแตล · อำเภอศีขรภูมิ · สุรินทร์</div></div>
+    <div id="svpill" class="saving-pill"><div class="saving-dot"></div><span>กำลังบันทึก</span></div>
+    <div class="h-right">
+      <div class="dtabs" id="dtabs"></div>
+      <span id="huname" class="h-username"></span>
+      <span id="hrole" class="role-pill"></span>
+      <button class="h-logout" onclick="doLogout()">ออก</button>
     </div>
   </div>
-</div>
+</header>
 
-<div class="content">
+<!-- CONTENT -->
+<main class="content" id="app-cnt">
 
-  <!-- MEMBERS TAB -->
-  <div id="tab-members">
-    <div class="toolbar">
-      <input id="search" oninput="renderMembers()" placeholder="🔍 ค้นหาชื่อ / บ้านเลขที่..." style="max-width:320px"/>
-      <button class="btn-primary" onclick="openMemberForm()">+ เพิ่มสมาชิก</button>
-      <span class="count" id="member-count"></span>
+  <!-- MEMBERS -->
+  <div id="tab-members" class="tab-section active">
+    <div class="phdr">
+      <div class="phdr-icon phi-blue">👥</div>
+      <div><h2>รายชื่อสมาชิก</h2><p id="mc-sub">-</p></div>
+      <div class="phdr-actions">
+        <div class="search-wrap"><span class="search-ico">🔍</span><input id="search" oninput="renderM()" placeholder="ค้นหาชื่อ / บ้านเลขที่..."/></div>
+        <button class="btn btn-primary" id="btn-addm" onclick="openMF()" style="display:none">+ เพิ่มสมาชิก</button>
+      </div>
     </div>
-
-    <div id="member-form" class="form-card" style="display:none">
-      <div class="form-title" id="member-form-title">➕ เพิ่มสมาชิกใหม่</div>
-      <div class="form-grid">
-        <div><div class="label">ชื่อ *</div><input id="f_first_name" placeholder="ชื่อ"/></div>
-        <div><div class="label">นามสกุล *</div><input id="f_last_name" placeholder="นามสกุล"/></div>
-        <div><div class="label">บ้านเลขที่ *</div><input id="f_house_no" placeholder="บ้านเลขที่"/></div>
-        <div><div class="label">ที่อยู่</div><input id="f_address" placeholder="ที่อยู่"/></div>
-        <div><div class="label">หมู่ที่</div><input id="f_moo" placeholder="หมู่ที่"/></div>
-        <div><div class="label">หมู่บ้าน</div><input id="f_village" value="บ้านบุละลาย"/></div>
-        <div><div class="label">ตำบล</div><input id="f_tambon" value="ตำบลแตล"/></div>
-        <div><div class="label">อำเภอ</div><input id="f_amphoe" value="อำเภอศีขรภูมิ"/></div>
-        <div><div class="label">จังหวัด</div><input id="f_province" value="จังหวัดสุรินทร์"/></div>
+    <div id="mnotice" class="notice" style="display:none">👁 คุณมีสิทธิ์ดูข้อมูลเท่านั้น</div>
+    <div id="mform" class="form-card" style="display:none">
+      <h3 id="mft">➕ เพิ่มสมาชิกใหม่</h3>
+      <div class="fg">
+        <div class="full"><div class="flbl">ชื่อ *</div><input id="f_fn" placeholder="ชื่อ"/></div>
+        <div class="full"><div class="flbl">นามสกุล *</div><input id="f_ln" placeholder="นามสกุล"/></div>
+        <div><div class="flbl">บ้านเลขที่ *</div><input id="f_hn" placeholder="12/3"/></div>
+        <div><div class="flbl">หมู่ที่</div><input id="f_moo" placeholder="1"/></div>
+        <div class="full"><div class="flbl">ที่อยู่</div><input id="f_addr" placeholder="ที่อยู่"/></div>
+        <div><div class="flbl">หมู่บ้าน</div><input id="f_vil" value="บ้านบุละลาย"/></div>
+        <div><div class="flbl">ตำบล</div><input id="f_tam" value="ตำบลแตล"/></div>
+        <div><div class="flbl">อำเภอ</div><input id="f_amp" value="อำเภอศีขรภูมิ"/></div>
+        <div><div class="flbl">จังหวัด</div><input id="f_prov" value="จังหวัดสุรินทร์"/></div>
       </div>
       <div class="form-actions">
-        <button class="btn-primary" onclick="saveMember()">💾 บันทึก</button>
-        <button class="btn-secondary" onclick="closeMemberForm()">ยกเลิก</button>
+        <button class="btn btn-primary" onclick="saveM()">💾 บันทึก</button>
+        <button class="btn btn-ghost" onclick="closeMF()">ยกเลิก</button>
       </div>
     </div>
-
-    <div class="overflow">
-      <table>
-        <thead><tr>
-          <th>#</th><th>ชื่อ-สกุล</th><th>บ้านเลขที่</th><th>ที่อยู่</th><th>หมู่</th>
-          <th>หมู่บ้าน</th><th>ตำบล</th><th>อำเภอ</th><th>จังหวัด</th><th>มิเตอร์ล่าสุด</th><th>จัดการ</th>
-        </tr></thead>
-        <tbody id="member-tbody"></tbody>
-      </table>
-    </div>
+    <div id="mcards" class="d-cards"></div>
+    <div class="d-tbl tw"><div class="ts"><table>
+      <thead><tr><th>#</th><th>ชื่อ-สกุล</th><th>บ้านเลขที่</th><th>ที่อยู่</th><th>หมู่</th><th>หมู่บ้าน</th><th>ตำบล</th><th>อำเภอ</th><th>มิเตอร์</th><th id="th-ma"></th></tr></thead>
+      <tbody id="mtbody"></tbody>
+    </table></div></div>
   </div>
 
-  <!-- USAGE TAB -->
-  <div id="tab-usage" style="display:none">
-    <div class="toolbar">
-      <span class="count" id="reading-count"></span>
-      <button class="btn-primary" onclick="openUsageForm()" style="margin-left:auto">+ บันทึกมิเตอร์</button>
-    </div>
-
-    <div id="usage-form" class="form-card" style="display:none">
-      <div class="form-title">📝 บันทึกค่ามิเตอร์น้ำ</div>
-      <div class="form-grid">
-        <div class="span2"><div class="label">สมาชิก *</div>
-          <select id="u_member_id" onchange="autoFillMeter()">
-            <option value="">-- เลือกสมาชิก --</option>
-          </select>
-        </div>
-        <div><div class="label">ปี (พ.ศ.)</div><input type="number" id="u_year" value="2568"/></div>
-        <div><div class="label">เดือน</div>
-          <select id="u_month">
-            <option value="1">ม.ค.</option><option value="2">ก.พ.</option><option value="3">มี.ค.</option>
-            <option value="4">เม.ย.</option><option value="5">พ.ค.</option><option value="6">มิ.ย.</option>
-            <option value="7">ก.ค.</option><option value="8">ส.ค.</option><option value="9">ก.ย.</option>
-            <option value="10">ต.ค.</option><option value="11">พ.ย.</option><option value="12">ธ.ค.</option>
-          </select>
-        </div>
-        <div><div class="label">มิเตอร์เดิม</div><input type="number" id="u_prev" oninput="calcUsage()" placeholder="0"/></div>
-        <div><div class="label">มิเตอร์ใหม่</div><input type="number" id="u_cur" oninput="calcUsage()" placeholder="0"/></div>
-        <div><div class="label">ราคา/หน่วย (บาท)</div><input type="number" id="u_price" value="8" oninput="calcUsage()"/></div>
+  <!-- USAGE -->
+  <div id="tab-usage" class="tab-section">
+    <div class="phdr">
+      <div class="phdr-icon phi-blue">🚿</div>
+      <div><h2>บันทึกมิเตอร์</h2><p id="rc-sub">-</p></div>
+      <div class="phdr-actions">
+        <button class="btn btn-primary" id="btn-addr" onclick="openRF()" style="display:none">+ บันทึกมิเตอร์</button>
       </div>
-      <div id="calc-result" class="calc-box" style="display:none"></div>
+    </div>
+    <div id="rnotice" class="notice" style="display:none">👁 คุณมีสิทธิ์ดูข้อมูลเท่านั้น</div>
+    <div id="rform" class="form-card" style="display:none">
+      <h3>📝 บันทึกค่ามิเตอร์น้ำ</h3>
+      <div class="fg">
+        <div class="full"><div class="flbl">สมาชิก *</div><select id="u_mid" onchange="autoFill()"><option value="">— เลือกสมาชิก —</option></select></div>
+        <div><div class="flbl">ปี (พ.ศ.)</div><input type="number" id="u_yr" value="2568"/></div>
+        <div><div class="flbl">เดือน</div><select id="u_mo"><option value="1">มกราคม</option><option value="2">กุมภาพันธ์</option><option value="3">มีนาคม</option><option value="4">เมษายน</option><option value="5">พฤษภาคม</option><option value="6">มิถุนายน</option><option value="7">กรกฎาคม</option><option value="8">สิงหาคม</option><option value="9">กันยายน</option><option value="10">ตุลาคม</option><option value="11">พฤศจิกายน</option><option value="12">ธันวาคม</option></select></div>
+        <div><div class="flbl">มิเตอร์เดิม</div><input type="number" id="u_prev" oninput="calcU()" placeholder="0"/></div>
+        <div><div class="flbl">มิเตอร์ใหม่</div><input type="number" id="u_cur" oninput="calcU()" placeholder="0"/></div>
+        <div><div class="flbl">ราคา/หน่วย (บาท)</div><input type="number" id="u_price" value="8" oninput="calcU()"/></div>
+      </div>
+      <div id="cbox" class="calc-box">
+        <div class="cb-lbl">ปริมาณการใช้น้ำ</div>
+        <div class="cb-val"><span id="cb-u">0</span> <span style="font-size:16px;color:var(--text2)">หน่วย</span></div>
+        <div class="cb-baht">💰 ยอดชำระ: <span id="cb-a">0</span> บาท</div>
+      </div>
       <div class="form-actions">
-        <button class="btn-primary" onclick="saveUsage()">💾 บันทึก</button>
-        <button class="btn-secondary" onclick="closeUsageForm()">ยกเลิก</button>
+        <button class="btn btn-primary" onclick="saveR()">💾 บันทึก</button>
+        <button class="btn btn-ghost" onclick="closeRF()">ยกเลิก</button>
       </div>
     </div>
-
-    <div class="overflow">
-      <table>
-        <thead><tr>
-          <th>#</th><th>สมาชิก</th><th>บ้านเลขที่</th><th>ปี</th><th>เดือน</th>
-          <th>มิเตอร์เดิม</th><th>มิเตอร์ใหม่</th><th>หน่วย</th><th>ราคา/หน่วย</th><th>ยอดเงิน</th><th>ลบ</th>
-        </tr></thead>
-        <tbody id="usage-tbody"></tbody>
-      </table>
-    </div>
+    <div id="rcards" class="d-cards"></div>
+    <div class="d-tbl tw"><div class="ts"><table>
+      <thead><tr><th>#</th><th>สมาชิก</th><th>บ้านเลขที่</th><th>ปี</th><th>เดือน</th><th class="tr">มิเตอร์เดิม</th><th class="tr">มิเตอร์ใหม่</th><th class="tr">หน่วย</th><th class="tr">ราคา/หน่วย</th><th class="tr">ยอดเงิน</th><th id="th-ra"></th></tr></thead>
+      <tbody id="rtbody"></tbody>
+    </table></div></div>
   </div>
 
-  <!-- SUMMARY TAB -->
-  <div id="tab-summary" style="display:none">
-    <div class="filter-row">
-      <div><div class="label">ปี (พ.ศ.)</div><input type="number" id="s_year" class="fw" value="2568" oninput="loadSummary()"/></div>
-      <div><div class="label">เดือน</div>
-        <select id="s_month" class="fm" onchange="loadSummary()">
-          <option value="1">ม.ค.</option><option value="2">ก.พ.</option><option value="3">มี.ค.</option>
-          <option value="4">เม.ย.</option><option value="5">พ.ค.</option><option value="6">มิ.ย.</option>
-          <option value="7">ก.ค.</option><option value="8">ส.ค.</option><option value="9">ก.ย.</option>
-          <option value="10">ต.ค.</option><option value="11">พ.ย.</option><option value="12">ธ.ค.</option>
-        </select>
+  <!-- SUMMARY -->
+  <div id="tab-summary" class="tab-section">
+    <div class="phdr">
+      <div class="phdr-icon phi-gold">📊</div>
+      <div><h2>สรุปรายเดือน</h2><p>ยอดการใช้น้ำและค่าบริการ</p></div>
+      <div class="phdr-actions">
+        <div><div class="flbl" style="margin-bottom:6px">ปี (พ.ศ.)</div><input type="number" id="s_yr" value="2568" oninput="loadSum()" style="width:90px"/></div>
+        <div><div class="flbl" style="margin-bottom:6px">เดือน</div><select id="s_mo" onchange="loadSum()" style="width:130px"><option value="1">มกราคม</option><option value="2">กุมภาพันธ์</option><option value="3">มีนาคม</option><option value="4">เมษายน</option><option value="5">พฤษภาคม</option><option value="6">มิถุนายน</option><option value="7">กรกฎาคม</option><option value="8">สิงหาคม</option><option value="9">กันยายน</option><option value="10">ตุลาคม</option><option value="11">พฤศจิกายน</option><option value="12">ธันวาคม</option></select></div>
       </div>
-      <div class="section-title" id="summary-title" style="padding-bottom:2px"></div>
     </div>
-
-    <div class="kpi-grid" id="kpi-grid"></div>
-
-    <div class="overflow">
-      <table>
-        <thead><tr>
-          <th>#</th><th>ชื่อ-สกุล</th><th>บ้านเลขที่</th><th>หมู่บ้าน</th>
-          <th>มิเตอร์เดิม</th><th>มิเตอร์ใหม่</th><th>หน่วย</th><th>ราคา/หน่วย</th><th>ยอดเงิน (บาท)</th>
-        </tr></thead>
-        <tbody id="summary-tbody"></tbody>
-      </table>
-    </div>
+    <div class="stats-grid" id="sgrid"></div>
+    <div id="scards" class="d-cards"></div>
+    <div class="d-tbl tw"><div class="ts"><table>
+      <thead><tr><th>#</th><th>ชื่อ-สกุล</th><th>บ้านเลขที่</th><th>หมู่บ้าน</th><th class="tr">มิเตอร์เดิม</th><th class="tr">มิเตอร์ใหม่</th><th class="tr">หน่วย</th><th class="tr">ราคา/หน่วย</th><th class="tr">ยอดเงิน</th></tr></thead>
+      <tbody id="stbody"></tbody>
+    </table></div></div>
   </div>
 
-</div>
+  <!-- USERS -->
+  <div id="tab-users" class="tab-section">
+    <div class="phdr">
+      <div class="phdr-icon phi-gold">⚙️</div>
+      <div><h2>จัดการผู้ใช้งาน</h2><p>เพิ่ม แก้ไข และกำหนดสิทธิ์ผู้ใช้</p></div>
+      <div class="phdr-actions"><button class="btn btn-primary" onclick="openUF()">+ เพิ่มผู้ใช้</button></div>
+    </div>
+    <div id="uform" class="form-card" style="display:none">
+      <h3 id="uft">➕ เพิ่มผู้ใช้งานใหม่</h3>
+      <div class="fg">
+        <div><div class="flbl">ชื่อผู้ใช้ *</div><input id="uf_u" placeholder="username"/></div>
+        <div><div class="flbl">รหัสผ่าน</div><input type="password" id="uf_p" placeholder="ปล่อยว่าง = ไม่เปลี่ยน"/></div>
+        <div class="full"><div class="flbl">ชื่อ-สกุล *</div><input id="uf_n" placeholder="ชื่อ-นามสกุล"/></div>
+        <div><div class="flbl">บทบาท</div><select id="uf_r"><option value="admin">👑 Admin</option><option value="collector">💼 เจ้าหน้าที่เก็บเงิน</option><option value="user" selected>👤 User</option></select></div>
+        <div><div class="flbl">สถานะ</div><select id="uf_a"><option value="1">✅ เปิดใช้งาน</option><option value="0">🚫 ระงับ</option></select></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="saveU()">💾 บันทึก</button>
+        <button class="btn btn-ghost" onclick="closeUF()">ยกเลิก</button>
+      </div>
+    </div>
+    <div class="tw"><div class="ts"><table style="min-width:480px">
+      <thead><tr><th>#</th><th>ชื่อผู้ใช้</th><th>ชื่อ-สกุล</th><th>บทบาท</th><th>สถานะ</th><th>จัดการ</th></tr></thead>
+      <tbody id="utbody"></tbody>
+    </table></div></div>
+  </div>
+</main>
+
+<nav class="bnav" id="bnav" style="display:none">
+  <div class="bn-inner" id="bni"></div>
+</nav>
 
 <script>
-const MONTHS = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']
-let members = [], readings = [], editId = null, deleteId = null
+const MO=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม']
+const MOS=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']
+let members=[],readings=[],users=[],eMId=null,eUId=null,dId=null,dType=null,cu=null
 
-// ── API ──────────────────────────────────────────────────────────
-async function api(url, options={}) {
-  const res = await fetch(url, { headers:{'Content-Type':'application/json'}, ...options })
-  const data = await res.json()
-  if (!res.ok) throw new Error(data.error || 'เกิดข้อผิดพลาด')
-  return data
+async function api(url,opt={}){const r=await fetch(url,{headers:{'Content-Type':'application/json'},...opt});const d=await r.json();if(!r.ok)throw new Error(d.error||'เกิดข้อผิดพลาด');return d}
+function toast(msg,type='ok'){const el=document.getElementById('toast');el.textContent=(type==='ok'?'✅ ':'❌ ')+msg;el.style.background=type==='ok'?'#065f46':'#7f1d1d';el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2500)}
+function sv(v){const el=document.getElementById('svpill');el.style.display=v?'flex':'none'}
+const can={eM:()=>cu&&cu.role==='admin',eR:()=>cu&&['admin','collector'].includes(cu.role),eU:()=>cu&&cu.role==='admin'}
+
+async function doLogin(){
+  const u=document.getElementById('lu').value.trim(),p=document.getElementById('lp').value
+  const err=document.getElementById('lerr'),btn=document.getElementById('lbtn')
+  if(!u||!p){err.textContent='กรุณากรอก username และ password';err.style.display='block';return}
+  btn.textContent='กำลังเข้าสู่ระบบ...';btn.disabled=true
+  try{const user=await api('/api/auth/login',{method:'POST',body:JSON.stringify({username:u,password:p})});cu=user;sessionStorage.setItem('cu',JSON.stringify(user));err.style.display='none';showApp()}
+  catch(e){err.textContent=e.message;err.style.display='block'}
+  btn.textContent='เข้าสู่ระบบ';btn.disabled=false
+}
+function doLogout(){sessionStorage.removeItem('cu');cu=null;document.getElementById('login-page').style.display='flex';document.getElementById('app-hdr').style.display='none';document.getElementById('app-cnt').style.display='none';document.getElementById('bnav').style.display='none';document.getElementById('lp').value='';document.getElementById('lerr').style.display='none'}
+
+function showApp(){
+  document.getElementById('login-page').style.display='none'
+  document.getElementById('app-hdr').style.display='block'
+  document.getElementById('app-cnt').style.display='block'
+  const rm={admin:{l:'ADMIN',c:'rp-admin'},collector:{l:'เก็บเงิน',c:'rp-collector'},user:{l:'USER',c:'rp-user'}}
+  const r=rm[cu.role]||rm.user
+  document.getElementById('huname').textContent=cu.full_name
+  const rb=document.getElementById('hrole');rb.textContent=r.l;rb.className='role-pill '+r.c
+  const tabs=[{k:'members',i:'👥',l:'สมาชิก'},{k:'usage',i:'🚿',l:'มิเตอร์'},{k:'summary',i:'📊',l:'สรุป'}]
+  if(can.eU())tabs.push({k:'users',i:'⚙️',l:'ผู้ใช้'})
+  document.getElementById('dtabs').innerHTML=tabs.map(t=>`<button class="dt-btn${t.k==='members'?' active':''}" onclick="swTab('${t.k}')">${t.i} ${t.l}</button>`).join('')
+  document.getElementById('bni').innerHTML=tabs.map(t=>`<button class="bn-btn${t.k==='members'?' active':''}" id="bn-${t.k}" onclick="swTab('${t.k}')"><span class="bi">${t.i}</span><span>${t.l}</span></button>`).join('')
+  document.getElementById('bnav').style.display='block'
+  if(can.eM()){document.getElementById('btn-addm').style.display='flex';document.getElementById('th-ma').textContent='จัดการ'}
+  else document.getElementById('mnotice').style.display='flex'
+  if(can.eR()){document.getElementById('btn-addr').style.display='flex';document.getElementById('th-ra').textContent='ลบ'}
+  else document.getElementById('rnotice').style.display='flex'
+  init()
 }
 
-// ── Toast ──
-function toast(msg, type='success') {
-  const el = document.getElementById('toast')
-  el.textContent = (type==='error'?'❌ ':'✅ ') + msg
-  el.style.background = type==='error' ? '#c0392b' : '#1a7a4a'
-  el.classList.add('show')
-  setTimeout(() => el.classList.remove('show'), 2500)
+function swTab(t){
+  document.querySelectorAll('.tab-section').forEach(x=>x.classList.remove('active'))
+  document.getElementById('tab-'+t).classList.add('active')
+  document.querySelectorAll('.dt-btn').forEach(b=>b.classList.remove('active'))
+  const lm={members:'สมาชิก',usage:'มิเตอร์',summary:'สรุป',users:'ผู้ใช้'}
+  document.querySelectorAll('.dt-btn').forEach(b=>{if(b.textContent.includes(lm[t]))b.classList.add('active')})
+  document.querySelectorAll('.bn-btn').forEach(b=>b.classList.remove('active'))
+  const bn=document.getElementById('bn-'+t);if(bn)bn.classList.add('active')
+  if(t==='summary')loadSum()
+  if(t==='users')loadUsers()
 }
 
-// ── Saving badge ──
-function setSaving(v) { document.getElementById('saving-badge').style.display = v?'block':'none' }
-
-// ── Tab ──
-function switchTab(t) {
-  ['members','usage','summary'].forEach(x => {
-    document.getElementById('tab-'+x).style.display = x===t ? 'block' : 'none'
-    document.querySelectorAll('.tab-btn')[['members','usage','summary'].indexOf(x)].classList.toggle('active', x===t)
-  })
-  if (t==='summary') loadSummary()
+async function init(){
+  try{const[m,r]=await Promise.all([api('/api/members'),api('/api/readings')]);members=m;readings=r;renderM();renderR();popSel();const now=new Date();document.getElementById('u_mo').value=now.getMonth()+1;document.getElementById('s_mo').value=now.getMonth()+1}
+  catch(e){toast('ไม่สามารถเชื่อมต่อฐานข้อมูล','err')}
 }
 
-// ── Init ──
-async function init() {
-  try {
-    const [m, r] = await Promise.all([api('/api/members'), api('/api/readings')])
-    members = m; readings = r
-    renderMembers(); renderReadings(); populateMemberSelect()
-    const now = new Date()
-    document.getElementById('u_month').value = now.getMonth()+1
-    document.getElementById('s_month').value = now.getMonth()+1
-  } catch(e) { toast('ไม่สามารถเชื่อมต่อฐานข้อมูล: '+e.message,'error') }
+function lm(mid){const r=readings.filter(x=>x.member_id==mid).sort((a,b)=>b.year-a.year||b.month-a.month);return r.length?r[0].cur_meter:''}
+
+function renderM(){
+  const q=document.getElementById('search').value.toLowerCase()
+  const list=members.filter(m=>`${m.first_name} ${m.last_name} ${m.house_no}`.toLowerCase().includes(q))
+  document.getElementById('mc-sub').textContent=`ทั้งหมด ${members.length} ราย`
+  const ce=can.eM()
+  document.getElementById('mcards').innerHTML=!list.length?`<div class="empty-row"><div class="ei">👤</div><p>ไม่พบข้อมูลสมาชิก</p></div>`:list.map(m=>`
+    <div class="mc au">
+      <div class="mc-top">
+        <div><div class="mc-name">${m.first_name} ${m.last_name}</div><div class="mc-addr">บ้านเลขที่ ${m.house_no} · หมู่ ${m.moo||'-'}</div></div>
+        <div><div class="mc-meter">${lm(m.id)!==''?Number(lm(m.id)).toLocaleString():'-'}</div><div class="mc-meter-lbl">มิเตอร์ล่าสุด</div></div>
+      </div>
+      <div class="mc-tags"><span class="mc-tag">🏘 ${m.village||''}</span><span class="mc-tag">📍 ${m.tambon||''}</span><span class="mc-tag">🗺 ${m.amphoe||''}</span></div>
+      ${ce?`<div class="mc-foot"><button class="btn btn-ghost btn-sm" onclick="openEditM(${m.id})">✏️ แก้ไข</button><button class="btn btn-danger btn-sm" onclick="cdel(${m.id},'m')">🗑️</button></div>`:''}
+    </div>`).join('')
+  document.getElementById('mtbody').innerHTML=!list.length?`<tr><td colspan="10"><div class="empty-row"><div class="ei">👤</div><p>ไม่พบข้อมูล</p></div></td></tr>`:
+    list.map((m,i)=>`<tr><td style="color:var(--text3)">${i+1}</td><td class="tn">${m.first_name} ${m.last_name}</td><td>${m.house_no}</td><td style="color:var(--text3)">${m.address||''}</td><td style="color:var(--text3)">หมู่ ${m.moo||''}</td><td>${m.village||''}</td><td>${m.tambon||''}</td><td>${m.amphoe||''}</td><td class="tr ta">${lm(m.id)!==''?Number(lm(m.id)).toLocaleString():'-'}</td><td>${ce?`<div class="tact"><button class="btn btn-ghost btn-sm btn-icon" onclick="openEditM(${m.id})">✏️</button><button class="btn btn-danger btn-sm btn-icon" onclick="cdel(${m.id},'m')">🗑️</button></div>`:''}</td></tr>`).join('')
+}
+function openMF(){eMId=null;['f_fn','f_ln','f_hn','f_moo','f_addr'].forEach(k=>document.getElementById(k).value='');document.getElementById('f_vil').value='บ้านบุละลาย';document.getElementById('f_tam').value='ตำบลแตล';document.getElementById('f_amp').value='อำเภอศีขรภูมิ';document.getElementById('f_prov').value='จังหวัดสุรินทร์';document.getElementById('mft').textContent='➕ เพิ่มสมาชิกใหม่';document.getElementById('mform').style.display='block';document.getElementById('mform').scrollIntoView({behavior:'smooth',block:'start'})}
+function closeMF(){document.getElementById('mform').style.display='none';eMId=null}
+function openEditM(id){const m=members.find(x=>x.id===id);if(!m)return;eMId=id;document.getElementById('f_fn').value=m.first_name||'';document.getElementById('f_ln').value=m.last_name||'';document.getElementById('f_hn').value=m.house_no||'';document.getElementById('f_addr').value=m.address||'';document.getElementById('f_moo').value=m.moo||'';document.getElementById('f_vil').value=m.village||'บ้านบุละลาย';document.getElementById('f_tam').value=m.tambon||'ตำบลแตล';document.getElementById('f_amp').value=m.amphoe||'อำเภอศีขรภูมิ';document.getElementById('f_prov').value=m.province||'จังหวัดสุรินทร์';document.getElementById('mft').textContent='✏️ แก้ไขข้อมูลสมาชิก';document.getElementById('mform').style.display='block';document.getElementById('mform').scrollIntoView({behavior:'smooth',block:'start'})}
+async function saveM(){
+  const body={first_name:document.getElementById('f_fn').value,last_name:document.getElementById('f_ln').value,house_no:document.getElementById('f_hn').value,address:document.getElementById('f_addr').value,moo:document.getElementById('f_moo').value,village:document.getElementById('f_vil').value,tambon:document.getElementById('f_tam').value,amphoe:document.getElementById('f_amp').value,province:document.getElementById('f_prov').value}
+  if(!body.first_name||!body.last_name||!body.house_no){toast('กรุณากรอกชื่อ นามสกุล บ้านเลขที่','err');return}
+  sv(true)
+  try{if(eMId){await api(`/api/members/${eMId}`,{method:'PUT',body:JSON.stringify(body)});toast('แก้ไขข้อมูลสำเร็จ')}else{await api('/api/members',{method:'POST',body:JSON.stringify(body)});toast('เพิ่มสมาชิกสำเร็จ')}
+    members=await api('/api/members');renderM();popSel();closeMF()}catch(e){toast(e.message,'err')}
+  sv(false)
+}
+function cdel(id,type){dId=id;dType=type;const cfg={m:{h:'ลบสมาชิก?',p:'ข้อมูลมิเตอร์ทั้งหมดของสมาชิกนี้จะถูกลบออกด้วย'},r:{h:'ลบรายการมิเตอร์?',p:'ข้อมูลการใช้น้ำรายการนี้จะถูกลบออกถาวร'},u:{h:'ลบผู้ใช้งาน?',p:'ผู้ใช้งานนี้จะไม่สามารถเข้าสู่ระบบได้อีก'}};const c=cfg[type]||cfg.m;document.getElementById('mh').textContent=c.h;document.getElementById('mp').textContent=c.p;document.getElementById('mok').onclick=dodel;document.getElementById('modal').classList.add('show')}
+function closeMod(){document.getElementById('modal').classList.remove('show');dId=null;dType=null}
+async function dodel(){sv(true);try{if(dType==='m'){await api(`/api/members/${dId}`,{method:'DELETE'});toast('ลบสมาชิกสำเร็จ');members=await api('/api/members');readings=await api('/api/readings');renderM();renderR();popSel()}else if(dType==='r'){await api(`/api/readings/${dId}`,{method:'DELETE'});toast('ลบรายการสำเร็จ');readings=await api('/api/readings');renderR()}else if(dType==='u'){await api(`/api/auth/users/${dId}`,{method:'DELETE'});toast('ลบผู้ใช้สำเร็จ');loadUsers()}}catch(e){toast(e.message,'err')};closeMod();sv(false)}
+
+function popSel(){const s=document.getElementById('u_mid'),c=s.value;s.innerHTML='<option value="">— เลือกสมาชิก —</option>'+members.map(m=>`<option value="${m.id}">${m.first_name} ${m.last_name} · บ้าน ${m.house_no}</option>`).join('');s.value=c}
+function autoFill(){const id=document.getElementById('u_mid').value,l=lm(id);if(l!=='')document.getElementById('u_prev').value=l;calcU()}
+function calcU(){const cur=Number(document.getElementById('u_cur').value),prv=Number(document.getElementById('u_prev').value),prc=Number(document.getElementById('u_price').value),box=document.getElementById('cbox');if(document.getElementById('u_cur').value!==''&&document.getElementById('u_prev').value!==''&&cur>=prv){const u=cur-prv;document.getElementById('cb-u').textContent=u;document.getElementById('cb-a').textContent=(u*prc).toLocaleString();box.style.display='block'}else box.style.display='none'}
+function renderR(){
+  document.getElementById('rc-sub').textContent=`บันทึกแล้ว ${readings.length} รายการ`
+  const list=[...readings].reverse(),cr=can.eR()
+  document.getElementById('rcards').innerHTML=!list.length?`<div class="empty-row"><div class="ei">🚿</div><p>ยังไม่มีข้อมูลมิเตอร์</p></div>`:list.map(r=>`
+    <div class="rc au">
+      <div class="rc-top">
+        <div><div class="rc-name">${r.first_name} ${r.last_name}</div><div class="rc-addr">บ้านเลขที่ ${r.house_no}</div></div>
+        <div class="rc-date"><div class="rc-mo">${MOS[r.month-1]}</div><div class="rc-yr">${r.year}</div></div>
+      </div>
+      <div class="rc-rows">
+        <div class="rc-row"><span class="rc-rl">มิเตอร์เดิม</span><span class="rc-rv">${Number(r.prev_meter).toLocaleString()}</span></div>
+        <div class="rc-row"><span class="rc-rl">มิเตอร์ใหม่</span><span class="rc-rv">${Number(r.cur_meter).toLocaleString()}</span></div>
+        <div class="rc-row"><span class="rc-rl">หน่วยที่ใช้</span><span class="rc-rv" style="color:var(--accent)">${Number(r.units)} หน่วย × ${r.price_per_unit} บาท</span></div>
+      </div>
+      <div class="rc-amt"><span class="rc-amt-lbl">ยอดชำระ</span><span class="rc-amt-val">${Number(r.amount).toLocaleString()} บาท</span></div>
+      ${cr?`<div style="margin-top:12px;text-align:right"><button class="btn btn-danger btn-sm" onclick="cdel(${r.id},'r')">🗑️ ลบ</button></div>`:''}
+    </div>`).join('')
+  document.getElementById('rtbody').innerHTML=!list.length?`<tr><td colspan="11"><div class="empty-row"><div class="ei">🚿</div><p>ยังไม่มีข้อมูล</p></div></td></tr>`:
+    list.map((r,i)=>`<tr><td style="color:var(--text3)">${i+1}</td><td class="tn">${r.first_name} ${r.last_name}</td><td>${r.house_no}</td><td>${r.year}</td><td>${MOS[r.month-1]}</td><td class="tr">${Number(r.prev_meter).toLocaleString()}</td><td class="tr">${Number(r.cur_meter).toLocaleString()}</td><td class="tr ta">${Number(r.units)}</td><td class="tr" style="color:var(--text3)">${r.price_per_unit}</td><td class="tr tg">${Number(r.amount).toLocaleString()}</td><td>${cr?`<button class="btn btn-danger btn-sm btn-icon" onclick="cdel(${r.id},'r')">🗑️</button>`:''}</td></tr>`).join('')
+}
+function openRF(){document.getElementById('rform').style.display='block';document.getElementById('rform').scrollIntoView({behavior:'smooth',block:'start'})}
+function closeRF(){document.getElementById('rform').style.display='none'}
+async function saveR(){
+  const body={member_id:document.getElementById('u_mid').value,year:Number(document.getElementById('u_yr').value),month:Number(document.getElementById('u_mo').value),prev_meter:Number(document.getElementById('u_prev').value),cur_meter:Number(document.getElementById('u_cur').value),price_per_unit:Number(document.getElementById('u_price').value)}
+  if(!body.member_id){toast('กรุณาเลือกสมาชิก','err');return}
+  sv(true)
+  try{await api('/api/readings',{method:'POST',body:JSON.stringify(body)});toast('บันทึกมิเตอร์สำเร็จ');readings=await api('/api/readings');renderR();closeRF();document.getElementById('u_prev').value='';document.getElementById('u_cur').value='';document.getElementById('cbox').style.display='none'}catch(e){toast(e.message,'err')}
+  sv(false)
 }
 
-// ── Last meter ──
-function lastMeter(mid) {
-  const r = readings.filter(x=>x.member_id==mid).sort((a,b)=>b.year-a.year||b.month-a.month)
-  return r.length ? r[0].cur_meter : ''
-}
-
-// ── Members ──
-function renderMembers() {
-  const q = document.getElementById('search').value.toLowerCase()
-  const list = members.filter(m=>`${m.first_name} ${m.last_name} ${m.house_no} ${m.village}`.toLowerCase().includes(q))
-  document.getElementById('member-count').textContent = `ทั้งหมด ${members.length} ราย`
-  const tb = document.getElementById('member-tbody')
-  if (!list.length) { tb.innerHTML = `<tr><td colspan="11" class="empty">ไม่พบข้อมูลสมาชิก</td></tr>`; return }
-  tb.innerHTML = list.map((m,i) => `
-    <tr>
-      <td>${i+1}</td>
-      <td class="td-name">${m.first_name} ${m.last_name}</td>
-      <td>${m.house_no}</td><td>${m.address||''}</td><td>หมู่ ${m.moo||''}</td>
-      <td>${m.village||''}</td><td>${m.tambon||''}</td><td>${m.amphoe||''}</td><td>${m.province||''}</td>
-      <td class="td-right td-cyan">${lastMeter(m.id)!==''?Number(lastMeter(m.id)).toLocaleString():'-'}</td>
-      <td>
-        <button class="btn-mini" onclick="openEditMember(${m.id})" style="margin-right:6px">✏️</button>
-        <button class="btn-mini btn-danger" onclick="confirmDelete(${m.id})">🗑️</button>
-      </td>
-    </tr>`).join('')
-}
-
-function openMemberForm() { editId=null; clearMForm(); document.getElementById('member-form-title').textContent='➕ เพิ่มสมาชิกใหม่'; document.getElementById('member-form').style.display='block' }
-function closeMemberForm() { document.getElementById('member-form').style.display='none'; editId=null }
-function clearMForm() {
-  ['first_name','last_name','house_no','address','moo'].forEach(k=>document.getElementById('f_'+k).value='')
-  document.getElementById('f_village').value='บ้านบุละลาย'
-  document.getElementById('f_tambon').value='ตำบลแตล'
-  document.getElementById('f_amphoe').value='อำเภอศีขรภูมิ'
-  document.getElementById('f_province').value='จังหวัดสุรินทร์'
-}
-
-function openEditMember(id) {
-  const m = members.find(x=>x.id===id); if(!m) return
-  editId = id
-  document.getElementById('f_first_name').value = m.first_name||''
-  document.getElementById('f_last_name').value  = m.last_name||''
-  document.getElementById('f_house_no').value   = m.house_no||''
-  document.getElementById('f_address').value    = m.address||''
-  document.getElementById('f_moo').value        = m.moo||''
-  document.getElementById('f_village').value    = m.village||'บ้านบุละลาย'
-  document.getElementById('f_tambon').value     = m.tambon||'ตำบลแตล'
-  document.getElementById('f_amphoe').value     = m.amphoe||'อำเภอศีขรภูมิ'
-  document.getElementById('f_province').value   = m.province||'จังหวัดสุรินทร์'
-  document.getElementById('member-form-title').textContent='✏️ แก้ไขข้อมูลสมาชิก'
-  document.getElementById('member-form').style.display='block'
-}
-
-async function saveMember() {
-  const body = {
-    first_name: document.getElementById('f_first_name').value,
-    last_name:  document.getElementById('f_last_name').value,
-    house_no:   document.getElementById('f_house_no').value,
-    address:    document.getElementById('f_address').value,
-    moo:        document.getElementById('f_moo').value,
-    village:    document.getElementById('f_village').value,
-    tambon:     document.getElementById('f_tambon').value,
-    amphoe:     document.getElementById('f_amphoe').value,
-    province:   document.getElementById('f_province').value,
-  }
-  if (!body.first_name||!body.last_name||!body.house_no) { toast('กรุณากรอกชื่อ นามสกุล บ้านเลขที่','error'); return }
-  setSaving(true)
-  try {
-    if (editId) { await api(`/api/members/${editId}`,{method:'PUT',body:JSON.stringify(body)}); toast('แก้ไขสำเร็จ') }
-    else        { await api('/api/members',{method:'POST',body:JSON.stringify(body)}); toast('เพิ่มสมาชิกสำเร็จ') }
-    members = await api('/api/members')
-    renderMembers(); populateMemberSelect(); closeMemberForm()
-  } catch(e) { toast(e.message,'error') }
-  setSaving(false)
-}
-
-// ── Delete ──
-function confirmDelete(id) { deleteId=id; document.getElementById('modal').classList.add('show') }
-function closeModal() { document.getElementById('modal').classList.remove('show'); deleteId=null }
-async function doDelete() {
-  setSaving(true)
-  try {
-    await api(`/api/members/${deleteId}`,{method:'DELETE'})
-    toast('ลบสมาชิกสำเร็จ')
-    members = await api('/api/members')
-    readings = await api('/api/readings')
-    renderMembers(); renderReadings(); populateMemberSelect()
-  } catch(e) { toast(e.message,'error') }
-  closeModal(); setSaving(false)
-}
-
-// ── Usage ──
-function populateMemberSelect() {
-  const sel = document.getElementById('u_member_id')
-  const cur = sel.value
-  sel.innerHTML = '<option value="">-- เลือกสมาชิก --</option>' +
-    members.map(m=>`<option value="${m.id}">${m.first_name} ${m.last_name} (บ้าน ${m.house_no})</option>`).join('')
-  sel.value = cur
-}
-
-function autoFillMeter() {
-  const id = document.getElementById('u_member_id').value
-  const lm = lastMeter(id)
-  if (lm !== '') document.getElementById('u_prev').value = lm
-  calcUsage()
-}
-
-function calcUsage() {
-  const cur = Number(document.getElementById('u_cur').value)
-  const prv = Number(document.getElementById('u_prev').value)
-  const prc = Number(document.getElementById('u_price').value)
-  const box = document.getElementById('calc-result')
-  if (document.getElementById('u_cur').value!=='' && document.getElementById('u_prev').value!=='' && cur>=prv) {
-    const u = cur-prv
-    box.innerHTML = `💧 ใช้น้ำ <span class="calc-num">${u}</span> หน่วย = <span class="calc-num td-gold">${(u*prc).toLocaleString()}</span> บาท`
-    box.style.display='block'
-  } else { box.style.display='none' }
-}
-
-function renderReadings() {
-  document.getElementById('reading-count').textContent = `บันทึกทั้งหมด ${readings.length} รายการ`
-  const tb = document.getElementById('usage-tbody')
-  if (!readings.length) { tb.innerHTML=`<tr><td colspan="11" class="empty">ยังไม่มีข้อมูลมิเตอร์</td></tr>`; return }
-  tb.innerHTML = [...readings].reverse().map((r,i)=>`
-    <tr>
-      <td>${i+1}</td>
-      <td class="td-name">${r.first_name} ${r.last_name}</td>
-      <td>${r.house_no}</td><td>${r.year}</td><td>${MONTHS[r.month-1]}</td>
-      <td class="td-right">${Number(r.prev_meter).toLocaleString()}</td>
-      <td class="td-right">${Number(r.cur_meter).toLocaleString()}</td>
-      <td class="td-right td-cyan">${Number(r.units)}</td>
-      <td class="td-right">${r.price_per_unit}</td>
-      <td class="td-right td-green">${Number(r.amount).toLocaleString()}</td>
-      <td><button class="btn-mini btn-danger" onclick="deleteReading(${r.id})">🗑️</button></td>
-    </tr>`).join('')
-}
-
-function openUsageForm() { document.getElementById('usage-form').style.display='block' }
-function closeUsageForm() { document.getElementById('usage-form').style.display='none' }
-
-async function saveUsage() {
-  const body = {
-    member_id:     document.getElementById('u_member_id').value,
-    year:          Number(document.getElementById('u_year').value),
-    month:         Number(document.getElementById('u_month').value),
-    prev_meter:    Number(document.getElementById('u_prev').value),
-    cur_meter:     Number(document.getElementById('u_cur').value),
-    price_per_unit:Number(document.getElementById('u_price').value),
-  }
-  if (!body.member_id) { toast('กรุณาเลือกสมาชิก','error'); return }
-  setSaving(true)
-  try {
-    await api('/api/readings',{method:'POST',body:JSON.stringify(body)})
-    toast('บันทึกมิเตอร์สำเร็จ')
-    readings = await api('/api/readings')
-    renderReadings(); closeUsageForm()
-    document.getElementById('u_prev').value=''
-    document.getElementById('u_cur').value=''
-    document.getElementById('calc-result').style.display='none'
-  } catch(e) { toast(e.message,'error') }
-  setSaving(false)
-}
-
-async function deleteReading(id) {
-  setSaving(true)
-  try {
-    await api(`/api/readings/${id}`,{method:'DELETE'})
-    toast('ลบรายการสำเร็จ')
-    readings = await api('/api/readings')
-    renderReadings()
-  } catch(e) { toast(e.message,'error') }
-  setSaving(false)
-}
-
-// ── Summary ──
-async function loadSummary() {
-  const year  = document.getElementById('s_year').value
-  const month = document.getElementById('s_month').value
-  document.getElementById('summary-title').textContent = `📋 ${MONTHS[month-1]} ${year}`
-  try {
-    const data = await api(`/api/summary?year=${year}&month=${month}`)
-    const t = data.totals
-    const avg = t.total_members ? Math.round(t.total_amount/t.total_members).toLocaleString() : '0'
-    document.getElementById('kpi-grid').innerHTML = [
-      { icon:'👥', label:'สมาชิกที่มีข้อมูล', value:t.total_members||0, unit:'ราย',   color:'#43e3ff' },
-      { icon:'💧', label:'ปริมาณน้ำรวม',     value:Number(t.total_units||0).toLocaleString(),  unit:'หน่วย', color:'#7fffb4' },
-      { icon:'💰', label:'ยอดเรียกเก็บรวม',  value:Number(t.total_amount||0).toLocaleString(), unit:'บาท',   color:'#ffd700' },
-      { icon:'📊', label:'เฉลี่ยต่อราย',     value:avg, unit:'บาท', color:'#ff9f7f' },
-    ].map(c=>`
-      <div class="kpi-card" style="border:1px solid ${c.color}22">
-        <div class="kpi-icon">${c.icon}</div>
-        <div class="kpi-value" style="color:${c.color}">${c.value} <span class="kpi-unit">${c.unit}</span></div>
-        <div class="kpi-label">${c.label}</div>
+async function loadSum(){
+  const yr=document.getElementById('s_yr').value,mo=document.getElementById('s_mo').value
+  try{
+    const data=await api(`/api/summary?year=${yr}&month=${mo}`),t=data.totals
+    const avg=t.total_members?Math.round(t.total_amount/t.total_members).toLocaleString():'0'
+    document.getElementById('sgrid').innerHTML=[
+      {k:'sc-blue',i:'👥',v:t.total_members||0,u:'ราย',l:'สมาชิกที่มีข้อมูล'},
+      {k:'sc-green',i:'💧',v:Number(t.total_units||0).toLocaleString(),u:'หน่วย',l:'ปริมาณน้ำรวม'},
+      {k:'sc-gold',i:'💰',v:Number(t.total_amount||0).toLocaleString(),u:'บาท',l:'ยอดเรียกเก็บรวม'},
+      {k:'sc-purple',i:'📊',v:avg,u:'บาท',l:'ค่าเฉลี่ยต่อราย'},
+    ].map(c=>`<div class="sc ${c.k} au"><div class="sc-ico">${c.i}</div><div class="sc-val">${c.v}<span class="sc-unit">${c.u}</span></div><div class="sc-lbl">${c.l}</div></div>`).join('')
+    if(!data.rows.length){document.getElementById('scards').innerHTML=`<div class="empty-row"><div class="ei">📊</div><p>ไม่มีข้อมูลในเดือน ${MO[mo-1]} ${yr}</p></div>`;document.getElementById('stbody').innerHTML=`<tr><td colspan="9"><div class="empty-row"><div class="ei">📊</div><p>ไม่มีข้อมูล</p></div></td></tr>`;return}
+    document.getElementById('scards').innerHTML=data.rows.map(r=>`
+      <div class="rc au">
+        <div class="rc-top"><div><div class="rc-name">${r.first_name} ${r.last_name}</div><div class="rc-addr">บ้านเลขที่ ${r.house_no} · ${r.village||''}</div></div><div class="rc-date"><div class="rc-mo">${MOS[mo-1]}</div><div class="rc-yr">${yr}</div></div></div>
+        <div class="rc-rows">
+          <div class="rc-row"><span class="rc-rl">มิเตอร์ ${Number(r.prev_meter).toLocaleString()} → ${Number(r.cur_meter).toLocaleString()}</span><span class="rc-rv" style="color:var(--accent)">${Number(r.units)} หน่วย</span></div>
+          <div class="rc-row"><span class="rc-rl">ราคา</span><span class="rc-rv">${r.price_per_unit} บาท/หน่วย</span></div>
+        </div>
+        <div class="rc-amt"><span class="rc-amt-lbl">ยอดชำระ</span><span class="rc-amt-val">${Number(r.amount).toLocaleString()} บาท</span></div>
       </div>`).join('')
-
-    const tb = document.getElementById('summary-tbody')
-    if (!data.rows.length) { tb.innerHTML=`<tr><td colspan="9" class="empty">ไม่มีข้อมูลในเดือน ${MONTHS[month-1]} ${year}</td></tr>`; return }
-    tb.innerHTML = data.rows.map((r,i)=>`
-      <tr>
-        <td>${i+1}</td>
-        <td class="td-name">${r.first_name} ${r.last_name}</td>
-        <td>${r.house_no}</td><td>${r.village}</td>
-        <td class="td-right">${Number(r.prev_meter).toLocaleString()}</td>
-        <td class="td-right">${Number(r.cur_meter).toLocaleString()}</td>
-        <td class="td-right td-cyan">${Number(r.units)}</td>
-        <td class="td-right">${r.price_per_unit}</td>
-        <td class="td-right td-green">${Number(r.amount).toLocaleString()}</td>
-      </tr>`).join('') +
-      `<tr class="tr-total">
-        <td colspan="6" style="text-align:right;color:#43e3ff;padding:10px 13px">รวมทั้งหมด</td>
-        <td class="td-right td-cyan">${Number(t.total_units||0)}</td>
-        <td></td>
-        <td class="td-right td-gold">${Number(t.total_amount||0).toLocaleString()}</td>
-      </tr>`
-  } catch(e) { toast(e.message,'error') }
+    document.getElementById('stbody').innerHTML=
+      data.rows.map((r,i)=>`<tr><td style="color:var(--text3)">${i+1}</td><td class="tn">${r.first_name} ${r.last_name}</td><td>${r.house_no}</td><td>${r.village}</td><td class="tr">${Number(r.prev_meter).toLocaleString()}</td><td class="tr">${Number(r.cur_meter).toLocaleString()}</td><td class="tr ta">${Number(r.units)}</td><td class="tr" style="color:var(--text3)">${r.price_per_unit}</td><td class="tr tg">${Number(r.amount).toLocaleString()}</td></tr>`).join('')+
+      `<tr class="tf"><td colspan="6" style="text-align:right;color:var(--text3);padding:12px 16px">รวมทั้งหมด</td><td class="tr ta">${Number(t.total_units||0)}</td><td></td><td class="tr tgo" style="font-size:16px">${Number(t.total_amount||0).toLocaleString()}</td></tr>`
+  }catch(e){toast(e.message,'err')}
 }
 
-// ── Start ──
-init()
+async function loadUsers(){try{users=await api('/api/auth/users');renderU()}catch(e){toast(e.message,'err')}}
+function renderU(){
+  const rl={admin:'<span class="chip chip-admin">👑 Admin</span>',collector:'<span class="chip chip-coll">💼 เก็บเงิน</span>',user:'<span class="chip chip-user">👤 User</span>'}
+  document.getElementById('utbody').innerHTML=!users.length?`<tr><td colspan="6"><div class="empty-row"><div class="ei">⚙️</div><p>ยังไม่มีผู้ใช้งาน</p></div></td></tr>`:
+    users.map((u,i)=>`<tr><td style="color:var(--text3)">${i+1}</td><td class="tn">${u.username}</td><td>${u.full_name}</td><td>${rl[u.role]||u.role}</td><td><span class="chip ${u.active?'chip-ok':'chip-no'}">${u.active?'✅ เปิดใช้':'🚫 ระงับ'}</span></td><td><div class="tact"><button class="btn btn-ghost btn-sm btn-icon" onclick="openEditU(${u.id})">✏️</button><button class="btn btn-danger btn-sm btn-icon" onclick="cdel(${u.id},'u')">🗑️</button></div></td></tr>`).join('')
+}
+function openUF(){eUId=null;['uf_u','uf_p','uf_n'].forEach(k=>document.getElementById(k).value='');document.getElementById('uf_r').value='user';document.getElementById('uf_a').value='1';document.getElementById('uft').textContent='➕ เพิ่มผู้ใช้งานใหม่';document.getElementById('uform').style.display='block';document.getElementById('uform').scrollIntoView({behavior:'smooth',block:'start'})}
+function closeUF(){document.getElementById('uform').style.display='none';eUId=null}
+function openEditU(id){const u=users.find(x=>x.id===id);if(!u)return;eUId=id;document.getElementById('uf_u').value=u.username;document.getElementById('uf_p').value='';document.getElementById('uf_n').value=u.full_name;document.getElementById('uf_r').value=u.role;document.getElementById('uf_a').value=u.active?'1':'0';document.getElementById('uft').textContent='✏️ แก้ไขผู้ใช้งาน';document.getElementById('uform').style.display='block';document.getElementById('uform').scrollIntoView({behavior:'smooth',block:'start'})}
+async function saveU(){
+  const body={username:document.getElementById('uf_u').value,password:document.getElementById('uf_p').value,full_name:document.getElementById('uf_n').value,role:document.getElementById('uf_r').value,active:Number(document.getElementById('uf_a').value)}
+  if(!body.full_name){toast('กรุณากรอกชื่อ-สกุล','err');return}
+  sv(true)
+  try{if(eUId){await api(`/api/auth/users/${eUId}`,{method:'PUT',body:JSON.stringify(body)});toast('แก้ไขผู้ใช้สำเร็จ')}else{if(!body.username||!body.password){toast('กรุณากรอก username และ password','err');sv(false);return}await api('/api/auth/users',{method:'POST',body:JSON.stringify(body)});toast('เพิ่มผู้ใช้สำเร็จ')}loadUsers();closeUF()}catch(e){toast(e.message,'err')}
+  sv(false)
+}
+const saved=sessionStorage.getItem('cu')
+if(saved){cu=JSON.parse(saved);showApp()}
 </script>
 </body>
 </html>
